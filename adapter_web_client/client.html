@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<!--
+		Licensed to the Apache Software Foundation (ASF) under one
+		or more contributor license agreements.  See the NOTICE file
+		distributed with this work for additional information
+		regarding copyright ownership.  The ASF licenses this file
+		to you under the Apache License, Version 2.0 (the
+		"License"); you may not use this file except in compliance
+		with the License.  You may obtain a copy of the License at
+		
+			http://www.apache.org/licenses/LICENSE-2.0
+		
+		Unless required by applicable law or agreed to in writing,
+		software distributed under the License is distributed on an
+		"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+		KIND, either express or implied.  See the License for the
+		specific language governing permissions and limitations
+		under the License.
+-->
+
+<!--
+		Solace Web Messaging API for JavaScript
+		PublishSubscribe tutorial - Topic Subscriber
+		Demonstrates subscribing to a topic for direct messages and receiving messages
+-->
+
+<html lang="en">
+	<head>
+		<title>HKJC Solace Web Messaging Demo Using JavaScript Subscribe Topic </title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge;" />
+		<meta charset="utf-8"/>
+
+		<script src="../lib/jquery-3.3.1.js"></script>
+		<script src="../lib/jquery.dataTables.min.js"></script>
+
+		<link rel="stylesheet" type="text/css" href="../resources/css/pure.css"></link>
+		<link rel="stylesheet" type="text/css" href="../resources/css/samples.css"></link>
+		<link rel="stylesheet" type="text/css" href="../lib/jquery.dataTables.min.css"></link>
+
+		<!-- Load Paho MQTT for JavaScript -->
+		<script src="../lib/mqttws31.js" type="text/javascript"></script>
+		<!-- Load the PublishSubscribe Topic Subscriber -->
+		<script src="../config.json.js"></script>
+		<script src="client.js"></script>
+
+		<!-- Execute the PublishSubscribe Topic Subscriber tutorial -->
+		<style>
+					.warning {
+							padding: 5px; 
+							border: 1px solid black; 
+							background-color: #ff8;
+					}
+					.ie11 {
+							/* Hide instructions that only apply to IE11/Edge */
+							display: none; 
+					}
+					@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+							.ie11 {
+									/* Show instructions in IE11. If you're trying this sample from the local filesystem,
+										 it's easy to miss the prompt at the bottom of the window. */
+									display: block !important;
+							}
+					}
+		</style>
+	</head>
+
+		<!-- used to prompt selection of client certificate -->
+		<iframe id="iframe" src="" onload="iframeloaded()" hidden></iframe>
+
+		<div class="banner">
+			<div class="banner-interior" style="background-color:white;">
+					<span class="logo" >`
+							<img src="../Logo/hkjclogo_e.png"/>
+							<img src="../Logo/Sonivy.png"/>
+							<img src="../Logo/Solace_Logo.png"/>
+					</span>
+				<div class="banner-heading" style="color: navy;">
+					HKJC Solace Web Messaging - Adapter Client (MQTT)
+				</div>
+			</div>
+		</div>
+
+		<div class="test"></div>
+		<div class="doc-body">
+			<h2>-	Client subscribes messages from adapter</h2>
+			<h3>Topic Subscribing: </br><span id="topic_name"></span></h3>
+			<table id="odd_table" style="width:100%" class="display">
+				<thead>
+					<tr>
+						<th>Match id</th>
+						<th>Pool State</th>
+						<th>Pool Channel</th>
+						<th>Pool Odds</th>
+						<!-- <th>Pool Code</th>
+						<th>Pool id</th>
+						<th>Last Update</th> -->
+						<!-- <th>Odds</th> -->
+					</tr>
+				</thead>
+			</table>
+				<!--[if IE]>
+						<div class="ie9 warning" style="padding: 5px; border: 1px solid black; background-color: #ff8;">
+								IE9 only: If you are running this sample from the local filesystem, click the "Allow blocked content" button
+								in the popup below to enable JavaScript.
+						</div>
+				<![endif]-->
+				<div class="ie11 warning">
+						IE 11 only: If you are running this sample from the local filesystem, click the "Allow blocked content" button
+						in the popup below to enable JavaScript.
+				</div>
+
+			<form class="pure-form pure-form-aligned">
+
+				<textarea id="log" rows="20" cols="90" autofocus></textarea>
+
+			</form>
+
+		</div>
+
+	</body>
+
+</html>
