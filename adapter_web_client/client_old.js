@@ -43,7 +43,7 @@ window.onload = function () {
 		userName: config.username,
 		password: config.pass,
 		onSuccess: onConnect,
-		useSSL: false,
+		useSSL: true,
 	});
 	// client2 = new Paho.MQTT.Client(
 	// 	config.mqtt_host,
@@ -70,7 +70,7 @@ window.onload = function () {
 		" & " +
 		topic_name3;
 
-	table = $("#odd_table").DataTable({ "ordering": false, select: true });
+	table = $("#odd_table").DataTable({ select: true });
 	table.on("click", "tr", function () {
 		var data = table.row(this).data();
 	});
@@ -155,7 +155,7 @@ function failSub(responseObject) {
 function iframeloaded() {}
 function push_live(match, topic_name) {
 	let matchID = topic_name.split("/")[7];
-	// showlog(matchID);
+	showlog(matchID);
 
 	// let { matchID, homeTeam, awayTeam, matchStatus, pool, lastupdated } = match;
 	let datas = table
@@ -173,18 +173,18 @@ function push_live(match, topic_name) {
 		.toArray();
 	console.log(datas);
 	if (datas.length == 0) {
-		if (!match.delete) {
+		if (Object.keys(match).length >= 0) {
 			table.row.add([matchID, null, null, null]).draw(false);
 		}
 	} else {
 		let flag_update = false;
 		datas.forEach((x) => {
 			if (x.matchID == matchID) {
-				if (match.delete) {
+				if (Object.keys(match).length == 0) {
 					table.row(x.index).remove().draw(false);
 				} else {
 					table.row
-						.add([matchID, null, null, null])
+						.add([matchID, JSON.stringify(match), null, null])
 						.draw(false);
 				}
 				// console.log("HERE" + x.index);
@@ -201,6 +201,8 @@ function push_live(match, topic_name) {
 function push_st(match, topic_name) {
 	let matchID = topic_name.split("/")[7];
 
+	showlog(Object.keys(match).length);
+
 	let datas = table
 		.rows()
 		.data()
@@ -215,22 +217,19 @@ function push_st(match, topic_name) {
 		})
 		.toArray();
 	console.log(datas);
-	if (datas.length == 0 && !match.delete) {
-		table.row
-		.add([matchID, JSON.stringify(match), null, null])
-		.draw(false);
-		// if (match.delete) {
-		// 	table.row.add([matchID, null, null, null]).draw(false);
-		// } else {
-		// 	table.row
-		// 		.add([matchID, JSON.stringify(match), null, null])
-		// 		.draw(false);
-		// }
+	if (datas.length == 0) {
+		if (Object.keys(match).length == 0) {
+			table.row.add([matchID, null, null, null]).draw(false);
+		} else {
+			table.row
+				.add([matchID, JSON.stringify(match), null, null])
+				.draw(false);
+		}
 	} else {
 		let flag_update = false;
 		datas.forEach((x) => {
 			if (x.matchID == matchID) {
-				if (match.delete) {
+				if (Object.keys(match).length == 0) {
 					table.cell(x.index, 1).data(null).draw();
 				} else {
 					table.cell(x.index, 1).data(JSON.stringify(match)).draw();
@@ -239,17 +238,14 @@ function push_st(match, topic_name) {
 				return;
 			}
 		});
-		if (!flag_update && !match.delete) {
-			table.row
-			.add([matchID, JSON.stringify(match), null, null])
-			.draw(false);
-			// if (Object.keys(match).length == 0) {
-			// 	table.row.add([matchID, null, null, null]).draw(false);
-			// } else {
-			// 	table.row
-			// 		.add([matchID, JSON.stringify(match), null, null])
-			// 		.draw(false);
-			// }
+		if (!flag_update) {
+			if (Object.keys(match).length == 0) {
+				table.row.add([matchID, null, null, null]).draw(false);
+			} else {
+				table.row
+					.add([matchID, JSON.stringify(match), null, null])
+					.draw(false);
+			}
 		}
 	}
 }
@@ -271,22 +267,19 @@ function push_chl(match, topic_name) {
 		})
 		.toArray();
 	console.log(datas);
-	if (datas.length == 0  && !match.delete ) {
-		table.row
-		.add([matchID, null, JSON.stringify(match), null])
-		.draw(false);
-		// if (Object.keys(match).length == 0) {
-		// 	table.row.add([matchID, null, null, null]).draw(false);
-		// } else {
-		// 	table.row
-		// 		.add([matchID, null, JSON.stringify(match), null])
-		// 		.draw(false);
-		// }
+	if (datas.length == 0) {
+		if (Object.keys(match).length == 0) {
+			table.row.add([matchID, null, null, null]).draw(false);
+		} else {
+			table.row
+				.add([matchID, null, JSON.stringify(match), null])
+				.draw(false);
+		}
 	} else {
 		let flag_update = false;
 		datas.forEach((x) => {
 			if (x.matchID == matchID) {
-				if (match.delete) {
+				if (Object.keys(match).length == 0) {
 					table.cell(x.index, 2).data(null).draw();
 				} else {
 					table.cell(x.index, 2).data(JSON.stringify(match)).draw();
@@ -295,17 +288,14 @@ function push_chl(match, topic_name) {
 				return;
 			}
 		});
-		if (!flag_update && !match.delete) {
-			table.row
-			.add([matchID, null, JSON.stringify(match), null])
-			.draw(false);
-			// if (Object.keys(match).length == 0) {
-			// 	table.row.add([matchID, null, null, null]).draw(false);
-			// } else {
-			// 	table.row
-			// 		.add([matchID, null, JSON.stringify(match), null])
-			// 		.draw(false);
-			// }
+		if (!flag_update) {
+			if (Object.keys(match).length == 0) {
+				table.row.add([matchID, null, null, null]).draw(false);
+			} else {
+				table.row
+					.add([matchID, null, JSON.stringify(match), null])
+					.draw(false);
+			}
 		}
 	}
 }
@@ -326,22 +316,19 @@ function push_odd(match, topic_name) {
 		})
 		.toArray();
 	console.log(datas);
-	if (datas.length == 0 && !match.delete) {
-		table.row
-		.add([matchID, null, null, JSON.stringify(match)])
-		.draw(false);
-		// if (Object.keys(match).length == 0) {
-		// 	table.row.add([matchID, null, null, null]).draw(false);
-		// } else {
-		// 	table.row
-		// 		.add([matchID, null, null, JSON.stringify(match)])
-		// 		.draw(false);
-		// }
+	if (datas.length == 0) {
+		if (Object.keys(match).length == 0) {
+			table.row.add([matchID, null, null, null]).draw(false);
+		} else {
+			table.row
+				.add([matchID, null, null, JSON.stringify(match)])
+				.draw(false);
+		}
 	} else {
 		let flag_update = false;
 		datas.forEach((x) => {
 			if (x.matchID == matchID) {
-				if (match.delete) {
+				if (Object.keys(match).length == 0) {
 					table.cell(x.index, 3).data(null).draw();
 				} else {
 					table.cell(x.index, 3).data(JSON.stringify(match)).draw();
@@ -350,17 +337,14 @@ function push_odd(match, topic_name) {
 				return;
 			}
 		});
-		if (!flag_update&&!match.delete) {
-			table.row
-			.add([matchID, null, null, JSON.stringify(match)])
-			.draw(false);
-			// if (Object.keys(match).length == 0) {
-			// 	table.row.add([matchID, null, null, null]).draw(false);
-			// } else {
-			// 	table.row
-			// 		.add([matchID, null, null, JSON.stringify(match)])
-			// 		.draw(false);
-			// }
+		if (!flag_update) {
+			if (Object.keys(match).length == 0) {
+				table.row.add([matchID, null, null, null]).draw(false);
+			} else {
+				table.row
+					.add([matchID, null, null, JSON.stringify(match)])
+					.draw(false);
+			}
 		}
 	}
 }
