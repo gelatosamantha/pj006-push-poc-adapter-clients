@@ -43,7 +43,9 @@ window.onload = function () {
 		userName: config.username,
 		password: config.pass,
 		onSuccess: onConnect,
-		useSSL: false,
+		useSSL: true,
+		keepAliveInterval: 60,
+		reconnect: true,
 	});
 	// client2 = new Paho.MQTT.Client(
 	// 	config.mqtt_host,
@@ -70,7 +72,7 @@ window.onload = function () {
 		" & " +
 		topic_name3;
 
-	table = $("#odd_table").DataTable({ "ordering": false, select: true });
+	table = $("#odd_table").DataTable({ ordering: false, select: true });
 	table.on("click", "tr", function () {
 		var data = table.row(this).data();
 	});
@@ -183,9 +185,7 @@ function push_live(match, topic_name) {
 				if (match.delete) {
 					table.row(x.index).remove().draw(false);
 				} else {
-					table.row
-						.add([matchID, null, null, null])
-						.draw(false);
+					table.row.add([matchID, null, null, null]).draw(false);
 				}
 				// console.log("HERE" + x.index);
 				// table.cell(x.index, 1).data(JSON.stringify(match)).draw();
@@ -216,9 +216,7 @@ function push_st(match, topic_name) {
 		.toArray();
 	console.log(datas);
 	if (datas.length == 0 && !match.delete) {
-		table.row
-		.add([matchID, JSON.stringify(match), null, null])
-		.draw(false);
+		table.row.add([matchID, JSON.stringify(match), null, null]).draw(false);
 		// if (match.delete) {
 		// 	table.row.add([matchID, null, null, null]).draw(false);
 		// } else {
@@ -241,8 +239,8 @@ function push_st(match, topic_name) {
 		});
 		if (!flag_update && !match.delete) {
 			table.row
-			.add([matchID, JSON.stringify(match), null, null])
-			.draw(false);
+				.add([matchID, JSON.stringify(match), null, null])
+				.draw(false);
 			// if (Object.keys(match).length == 0) {
 			// 	table.row.add([matchID, null, null, null]).draw(false);
 			// } else {
@@ -271,10 +269,8 @@ function push_chl(match, topic_name) {
 		})
 		.toArray();
 	console.log(datas);
-	if (datas.length == 0  && !match.delete ) {
-		table.row
-		.add([matchID, null, JSON.stringify(match), null])
-		.draw(false);
+	if (datas.length == 0 && !match.delete) {
+		table.row.add([matchID, null, JSON.stringify(match), null]).draw(false);
 		// if (Object.keys(match).length == 0) {
 		// 	table.row.add([matchID, null, null, null]).draw(false);
 		// } else {
@@ -297,8 +293,8 @@ function push_chl(match, topic_name) {
 		});
 		if (!flag_update && !match.delete) {
 			table.row
-			.add([matchID, null, JSON.stringify(match), null])
-			.draw(false);
+				.add([matchID, null, JSON.stringify(match), null])
+				.draw(false);
 			// if (Object.keys(match).length == 0) {
 			// 	table.row.add([matchID, null, null, null]).draw(false);
 			// } else {
@@ -327,9 +323,7 @@ function push_odd(match, topic_name) {
 		.toArray();
 	console.log(datas);
 	if (datas.length == 0 && !match.delete) {
-		table.row
-		.add([matchID, null, null, JSON.stringify(match)])
-		.draw(false);
+		table.row.add([matchID, null, null, JSON.stringify(match)]).draw(false);
 		// if (Object.keys(match).length == 0) {
 		// 	table.row.add([matchID, null, null, null]).draw(false);
 		// } else {
@@ -350,10 +344,10 @@ function push_odd(match, topic_name) {
 				return;
 			}
 		});
-		if (!flag_update&&!match.delete) {
+		if (!flag_update && !match.delete) {
 			table.row
-			.add([matchID, null, null, JSON.stringify(match)])
-			.draw(false);
+				.add([matchID, null, null, JSON.stringify(match)])
+				.draw(false);
 			// if (Object.keys(match).length == 0) {
 			// 	table.row.add([matchID, null, null, null]).draw(false);
 			// } else {
